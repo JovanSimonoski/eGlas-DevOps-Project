@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eglas-db-config
+  namespace: eglas
+data:
+  POSTGRES_DB: postgres
+  POSTGRES_USER: postgres
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: eglas-db-secret
+  namespace: eglas
+type: Opaque
+data:
+  POSTGRES_PASSWORD: am92YW4xMjM=
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: eglas-db
+  namespace: eglas
+spec:
+  replicas: 1
+  serviceName: eglas-db-service
+  selector:
+    matchLabels:
+      app: eglas-db
+  template:
+    metadata:
+      labels:
+        app: eglas-db
+        namespace: eglas
+    spec:
+      containers:
+        - name: eglas-db
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: eglas-db-config
+            - secretRef:
+                name: eglas-db-secret
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: eglas-db-storage
+      volumes:
+        - name: eglas-db-storage
+          persistentVolumeClaim:
+            claimName: eglas-db-pvc
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: eglas-db-service
+  namespace: eglas
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: eglas-db
