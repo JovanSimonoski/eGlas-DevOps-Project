@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: eglas_db
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: jovan123
+    volumes:
+      - /home/jovan/tmp:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  eglas-app:
+    image: jovansimonoski/eglas_app:latest
+    container_name: eglas_app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: jovan123
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
