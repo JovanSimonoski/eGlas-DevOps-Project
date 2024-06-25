@@ -1,0 +1,87 @@
+<nav class="navbar bg-secondary bg-gradient container-fluid px-0">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Податоци за одржувањето на изборите</span>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="container my-3">
+        <form th:object="${electionRelaization}" action="/admin/realizations" method="post">
+            <input type="hidden" th:field="*{id}">
+            <div class="mb-3">
+                <label for="name" class="form-label">Име</label>
+                <input type="text" th:field="*{name}" class="form-control" id="name" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="surname" class="form-label">Датум на одржување</label>
+                <input type="date" th:field="*{date}" class="form-control" id="surname" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Тип на избори</label>
+                <select class="form-control" id="municipality" th:field="*{election}" name="municipality">
+                    <option th:each="election : ${elections}" th:value="${election.id}"
+                            th:text="${election.name}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                    <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" name="candidacyElections"
+                           value="candidacyElections">
+                    <label class="btn btn-outline-primary" for="btncheck1">Избори со кандидатури</label>
+
+                    <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off"
+                           name="candidateListElections" value="candidateListElections">
+                    <label class="btn btn-outline-primary" for="btncheck2">Избори со кандидатски листи</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Запиши</button>
+        </form>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6">
+                <h3>Реализации на избори со кандидати</h3>
+                <table class="table table-striped table-hover">
+                    <thead class="table-header">
+                    <tr>
+                        <th>#</th>
+                        <th>Име</th>
+                        <th>Датум</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:onclick="|window.location.href='/admin/citizens/${elections.id}/edit';|"
+                        th:each="elections, iter : ${candidacyRealizations}">
+                        <td th:text="${iter.count}"></td>
+                        <td th:text="${elections.name}"></td>
+                        <td th:text="${elections.date}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-6">
+                <h3>Реализации на избори со кандидатска листа</h3>
+                <table class="table table-striped table-hover">
+                    <thead class="table-header">
+                    <tr>
+                        <th>#</th>
+                        <th>Име</th>
+                        <th>Датум</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:onclick="|window.location.href='/admin/citizens/${elections.id}/edit';|"
+                        th:each="elections, iter : ${candidateListRealizations}">
+                        <td th:text="${iter.count}"></td>
+                        <td th:text="${elections.name}"></td>
+                        <td th:text="${elections.date}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>

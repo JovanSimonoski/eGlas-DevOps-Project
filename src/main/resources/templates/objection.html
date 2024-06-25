@@ -1,0 +1,72 @@
+<nav class="navbar bg-secondary bg-gradient container-fluid px-0">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Податоци за приговорите</span>
+    </div>
+</nav>
+
+<div class="container-fluid">
+
+    <div class="container">
+        <form th:object="${objection}" action="/admin/objections" method="post">
+            <input type="hidden" th:field="*{id}">
+            <div class="mb-3">
+                <label for="realizations" class="form-label">Реализација на избори</label>
+                <select class="form-select" id="realizations" name="realization">
+                    <option th:each="realization: ${realizations}" th:field="*{electionRealization}"
+                            th:value="${realization.id}" th:text="${realization.name}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Избирачко место</label>
+                <input list="polling-stations" class="form-select" id="pollingStation" th:value="*{pollingStation}"
+                       name="pollingStation">
+                <datalist id="polling-stations">
+                    <option th:each="pollingStation : ${pollingStations}" th:value="${id}"></option>
+                </datalist>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Име на улица</label>
+                <textarea class="form-control" id="description" name="description" rows="10"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Запиши</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <table class="table table-striped table-hover">
+            <thead class="table-header">
+            <tr>
+                <th>#</th>
+                <th>Подносител</th>
+                <th>Датум</th>
+                <th>Избирачко место</th>
+                <th>Опис</th>
+                <th>Статус</th>
+                <th>Акција</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="objection, iter : ${objections}">
+                <td th:text="${iter.count}"></td>
+                <td></td>
+                <td></td>
+                <td th:text="${objection.pollingStation.id}"></td>
+                <td th:text="${objection.description}"></td>
+                <td>
+                    <span th:if="${objection.status == 1}" th:text="'Неодредено'"></span>
+                    <span th:if="${objection.status == 2}" th:text="'Прифатено'"></span>
+                    <span th:if="${objection.status == 3}" th:text="'Одбиено'"></span>
+                </td>
+                <td th:if="${objection.status == 1}">
+                    <a type="button" class="btn btn-success" th:href="'/admin/objections/' + ${objection.id} + '/accept'">Accept</a>
+                    <a type="button" class="btn btn-danger" th:href="'/admin/objections/' + ${objection.id} + '/reject'" >Reject</a>
+                </td>
+                <td th:if="${objection.status != 1}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!--th:onclick="|window.location.href='/admin/address/${address.id}/edit';|"-->

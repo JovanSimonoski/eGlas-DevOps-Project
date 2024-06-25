@@ -1,0 +1,37 @@
+<nav class="navbar bg-secondary bg-gradient container-fluid px-0">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Податоци за типовите на избори</span>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+
+    <div class="container">
+        <form th:object="${election}" action="/admin/elections" method="post">
+            <input type="hidden" th:field="*{id}">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Име на избори</label>
+                <input type="text" th:field="*{name}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+            <button type="submit" class="btn btn-primary">Запиши</button>
+        </form>
+    </div>
+    <div class="container">
+        <table class="table table-striped table-hover">
+            <thead class="table-header">
+            <tr>
+                <th>#</th>
+                <th>Име</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:onclick="|window.location.href='/admin/elections/${election.id}/edit';|" th:each="election, iter : ${elections}">
+                <td th:text="${iter.count}"></td>
+                <td th:text="${election.name}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

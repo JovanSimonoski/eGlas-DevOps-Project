@@ -1,0 +1,78 @@
+<nav class="navbar bg-secondary bg-gradient container-fluid px-0">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Податоци за гласачите - избирачки список</span>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="container-fluid">
+        <table class="table table-striped table-hover">
+            <thead class="table-header">
+            <tr>
+                <th>#</th>
+                <th>Име</th>
+                <th>Презиме</th>
+                <th>Датум на раѓање</th>
+                <th>ЕМБГ</th>
+                <th>Улица</th>
+                <th>Број</th>
+                <th>Влез</th>
+                <th>Стан</th>
+                <th>Општина</th>
+                <th>Број на лична карта</th>
+                <th>Важи од</th>
+                <th>Важи до</th>
+                <th colspan="2">Акции</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="citizen-row" th:onclick="|window.location.href='/admin/citizens/${citizen.citizen.id}/edit';|"
+                th:each="citizen, iter : ${citizens}">
+                <td th:text="${iter.count}"></td>
+                <td th:text="${citizen?.citizen?.name}"></td>
+                <td th:text="${citizen?.citizen?.surname}"></td>
+                <td th:text="${citizen?.citizen?.dateOfBirth}"></td>
+                <td th:text="${citizen?.citizen?.idNum}"></td>
+                <td th:text="${citizen?.citizen?.address?.street}"></td>
+                <td th:text="${citizen?.citizen?.address?.houseNumber}"></td>
+                <td th:text="${citizen?.citizen?.address?.entranceNumber}"></td>
+                <td th:text="${citizen?.citizen?.address?.apartmentNumber}"></td>
+                <td th:text="${citizen?.citizen?.address?.municipality?.name}"></td>
+                <td th:text="${citizen?.citizen?.document?.documentNumber}"></td>
+                <td th:text="${citizen?.citizen?.document?.issueDate}"></td>
+                <td th:text="${citizen?.citizen?.document?.expiryDate}"></td>
+                <td>
+                    <a th:if="${citizen?.timeVoted == null}" th:href="${'/admin/electionRealizationInterface/' + citizen.citizen.id}"
+                       class="add-voted-link btn btn-info">
+                        Гласај
+                    </a>
+                    <a th:if="${citizen?.timeVoted != null}" th:text="${citizen?.timeVoted}">
+
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $('.add-document-link').on('click', function (e) {
+            e.stopPropagation();
+            var citizenId = $(this).data('citizen-id');
+            var documentNumber = $(this).data('document-number');
+            var validFrom = $(this).data('valid-from');
+            var validTo = $(this).data('valid-to');
+            var issuer = $(this).data('issuer');
+            var documentId = $(this).data('document-id');
+
+            $('#citizenId').val(citizenId);
+            $('#documentNumber').val(documentNumber);
+            $('#validFrom').val(validFrom);
+            $('#validTo').val(validTo);
+            $('#issuer').val(issuer);
+            $('#documentId').val(documentId);
+        });
+    });
+</script>

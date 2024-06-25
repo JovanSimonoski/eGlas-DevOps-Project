@@ -1,0 +1,72 @@
+<nav class="navbar bg-secondary bg-gradient container-fluid px-0">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Податоци за адресите</span>
+    </div>
+</nav>
+
+<div class="container-fluid">
+
+    <div class="container">
+        <h2>Додади адреси</h2>
+        <form th:object="${address}" action="/admin/address" method="post">
+            <input type="hidden" th:field="*{id}">
+            <div class="mb-3">
+                <label for="street" class="form-label">Име на улица</label>
+                <input type="text" th:field="*{street}" class="form-control" id="street" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="houseNumber" class="form-label">Број</label>
+                <input type="number" th:field="*{houseNumber}" class="form-control" id="houseNumber">
+            </div>
+            <div class="mb-3">
+                <label for="entranceNumber" class="form-label">Влез</label>
+                <input type="number" th:field="*{entranceNumber}" class="form-control" id="entranceNumber">
+            </div>
+            <div class="mb-3">
+                <label for="apartmentNumber" class="form-label">Број стан</label>
+                <input type="number" th:field="*{apartmentNumber}" class="form-control" id="apartmentNumber">
+            </div>
+            <div class="mb-3">
+                <label for="apartmentNumber" class="form-label">Општина</label>
+                <select class="form-select" id="municipalities" name="municipality">
+                    <option th:each="muni : ${municipalities}" th:field="*{municipality}" th:value="${muni.id}" th:text="${muni.name}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="apartmentNumber" class="form-label">Гласачко место</label>
+                <select class="form-select" id="pollingStations" name="pollingStation">
+                    <option th:each="poll : ${pollingStations}" th:field="*{pollingStation}" th:value="${poll.id}" th:text="${poll.name}"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Запиши</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <table class="table table-striped table-hover">
+            <thead class="table-header">
+            <tr>
+                <th>#</th>
+                <th>Улица</th>
+                <th>Број</th>
+                <th>Влез</th>
+                <th>Врој стан</th>
+                <th>Општина</th>
+                <th>Гласачко место</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:onclick="|window.location.href='/admin/address/${address.id}/edit';|" th:each="address, iter : ${addresses}">
+                <td th:text="${iter.count}"></td>
+                <td th:text="${address.street}"></td>
+                <td th:text="${address.houseNumber}"></td>
+                <td th:text="${address.entranceNumber}"></td>
+                <td th:text="${address.apartmentNumber}"></td>
+                <td th:text="${address?.municipality.name}"></td>
+                <td th:text="${address?.pollingStation?.name}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

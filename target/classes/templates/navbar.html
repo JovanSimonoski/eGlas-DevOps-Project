@@ -1,0 +1,84 @@
+<nav class="navbar bg-body-tertiary ">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Почетна</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Излезност</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link">Гласање</a>
+                </li>
+            </ul>
+        </div>
+        <a class="navbar-brand" href="#">
+            <img src="https://i.ibb.co/5K9yhLt/eglas-logo.jpg"
+                 width="50"
+                 height="auto"/>
+        </a>
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar"
+             aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Мени</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/admin/citizens">Граѓани</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/units">Изборни единици</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/stations">Гласачки места</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/address">Адреси</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/municipalities">Општини</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/parties">Партии</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/citizens">Избирачки список</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Кандидатури</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/committee">Комисии</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="/admin/participations">Кандидати</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/candidatesList">Кандидатска Листа</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/coalition">Коалиции</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            Избори
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/admin/elections">Типови избори</a></li>
+                            <li><a class="dropdown-item" href="/admin/realizations">Реализации на избори</a></li>
+                            <li><a class="dropdown-item" href="/admin/objections">Приговори</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>

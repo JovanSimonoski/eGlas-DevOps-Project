@@ -1,0 +1,194 @@
+<!-- Modal for adding documents -->
+<div class="modal fade" id="addDocumentModal" tabindex="-1" aria-labelledby="addDocumentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDocumentModalLabel">Додади документ</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="documentForm" action="/admin/documents" method="post">
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="documentNumber" class="form-label">Број на лична карта</label>
+                        <input type="text" class="form-control" id="documentNumber" name="documentNumber">
+                    </div>
+                    <div class="mb-3">
+                        <label for="validFrom" class="form-label">Важи од:</label>
+                        <input type="date" class="form-control" id="validFrom" name="issueDate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="validTo" class="form-label">Важи до:</label>
+                        <input type="date" class="form-control" id="validTo" name="expiryDate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="validTo" class="form-label">Издавач:</label>
+                        <input type="text" class="form-control" id="issuer" name="issuer">
+                    </div>
+                    <input type="hidden" id="citizenId" name="citizenId">
+                    <input type="hidden" id="documentId" name="documentId">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Назад</button>
+                    <button type="submit" class="btn btn-primary">Зачувај</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<nav class="navbar bg-secondary bg-gradient container-fluid px-0">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Податоци за гласачите - избирачки список</span>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="container my-3">
+        <form th:object="${citizen}" action="/admin/citizens" method="post">
+            <input type="hidden" th:field="*{id}">
+            <div class="mb-3">
+                <label for="name" class="form-label">Име</label>
+                <input type="text" th:field="*{name}" class="form-control" id="name" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="surname" class="form-label">Презиме</label>
+                <input type="text" th:field="*{surname}" class="form-control" id="surname" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="dateOfBirth" class="form-label">Датум на раѓање</label>
+                <input type="date" th:field="*{dateOfBirth}" class="form-control" id="dateOfBirth"
+                       aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="idNum" class="form-label">ЕМБГ</label>
+                <input type="text" th:field="*{idNum}" class="form-control" id="idNum" aria-describedby="emailHelp">
+            </div>
+            <div class="row d-flex flex-row mb-3">
+                <label class="form-label">Адреса</label>
+                <div class="col col-md-6">
+                    <label class="form-label">Улица</label>
+                    <input list="streets" class="form-select" id="street" th:value="*{address?.street}" name="street">
+                    <datalist id="streets">
+                        <option th:each="street : ${streets}" th:value="${street}"></option>
+                    </datalist>
+                </div>
+                <div class="col col-md-2">
+                    <label class="form-label">Број</label>
+                    <input type="number" min="1" class="form-control" id="houseNumber"
+                           th:value="*{address?.houseNumber}" name="houseNumber">
+                </div>
+                <div class="col col-md-2">
+                    <label class="form-label">Влез</label>
+                    <input type="text" min="1" class="form-control" id="entranceNumber"
+                           th:value="*{address?.entranceNumber}" name="entranceNumber">
+                </div>
+                <div class="col col-md-2">
+                    <label class="form-label">Стан</label>
+                    <input type="text" min="1" class="form-control" id="apartmentNumber"
+                           th:value="*{address?.apartmentNumber}" name="apartmentNumber">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Општина</label>
+                <select class="form-control" id="municipality" th:value="*{address?.municipality}" name="municipality">
+                    <option th:each="municipality : ${municipalities}" th:value="${municipality.id}"
+                            th:text="${municipality.name}"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Запиши</button>
+        </form>
+    </div>
+    <div class="container my-3">
+        <form th:object="${citizen}" action="/admin/citizens" method="post">
+            <input type="hidden" th:field="*{id}">
+        </form>
+    </div>
+
+    <div class="container-fluid">
+        <table class="table table-striped table-hover">
+            <thead class="table-header">
+            <tr>
+                <th>#</th>
+                <th>Име</th>
+                <th>Презиме</th>
+                <th>Датум на раѓање</th>
+                <th>ЕМБГ</th>
+                <th>Улица</th>
+                <th>Број</th>
+                <th>Влез</th>
+                <th>Стан</th>
+                <th>Општина</th>
+                <th>Број на лична карта</th>
+                <th>Важи од</th>
+                <th>Важи до</th>
+                <th colspan="2">Акции</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="citizen-row" th:onclick="|window.location.href='/admin/citizens/${citizen.id}/edit';|"
+                th:each="citizen, iter : ${citizens}"
+                th:class="${citizen.type().equals('candidate') ? 'table-danger' : citizen.type().equals('committee') ? 'table-info' : ''}">
+                <td th:text="${iter.count}"></td>
+                <td th:text="${citizen.name}"></td>
+                <td th:text="${citizen.surname}"></td>
+                <td th:text="${citizen.dateOfBirth}"></td>
+                <td th:text="${citizen.idNum}"></td>
+                <td th:text="${citizen?.address?.street}"></td>
+                <td th:text="${citizen?.address?.houseNumber}"></td>
+                <td th:text="${citizen?.address?.entranceNumber}"></td>
+                <td th:text="${citizen?.address?.apartmentNumber}"></td>
+                <td th:text="${citizen?.address?.municipality?.name}"></td>
+                <td th:text="${citizen?.document?.documentNumber}"></td>
+                <td th:text="${citizen?.document?.issueDate}"></td>
+                <td th:text="${citizen?.document?.expiryDate}"></td>
+                <td>
+                    <a href="#" class="add-document-link btn btn-success" data-bs-toggle="modal"
+                       data-bs-target="#addDocumentModal"
+                       th:data-citizen-id="${citizen.id}" th:data-document-number="${citizen?.document?.documentNumber}"
+                       th:data-valid-from="${citizen?.document?.issueDate}"
+                       th:data-valid-to="${citizen?.document?.expiryDate}"
+                       th:data-issuer="${citizen?.document?.issuer}"
+                       th:data-document-id="${citizen?.document?.id}">
+                        Документ
+                    </a>
+                </td>
+                <td>
+                    <a th:href="${'/admin/citizens/' + citizen.id + '/candidate'}"
+                       class="add-document-link btn btn-danger">
+                        Кандидат
+                    </a>
+                </td>
+                <td>
+                    <a th:href="${'/admin/citizens/' + citizen.id + '/committee'}"
+                       class="add-document-link btn btn-info">
+                        Комисија
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $('.add-document-link').on('click', function (e) {
+            e.stopPropagation();
+            var citizenId = $(this).data('citizen-id');
+            var documentNumber = $(this).data('document-number');
+            var validFrom = $(this).data('valid-from');
+            var validTo = $(this).data('valid-to');
+            var issuer = $(this).data('issuer');
+            var documentId = $(this).data('document-id');
+
+            $('#citizenId').val(citizenId);
+            $('#documentNumber').val(documentNumber);
+            $('#validFrom').val(validFrom);
+            $('#validTo').val(validTo);
+            $('#issuer').val(issuer);
+            $('#documentId').val(documentId);
+        });
+    });
+</script>

@@ -1,0 +1,30 @@
+<style>
+    h2 {
+        color: #333;
+    }
+
+    h3 {
+        color: #555;
+        font-size: 24px;
+        margin-top: 10px;
+    }
+</style>
+
+
+<nav class="navbar bg-secondary bg-gradient container-fluid px-0">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Податоци за гласачите - код за електронско гласање со физичко присуство</span>
+    </div>
+</nav>
+
+<div class="container shadow p-3 mb-5 bg-body-tertiary rounded my-3 text-center d-flex flex-column align-items-center">
+    <h2>Код за гласач: </h2>
+    <h3 th:text="${code.code}"></h3>
+    <div id="qrcode"></div>
+    <script th:inline="javascript" type="text/javascript">
+        var codeValue = /*[[${code.code}]]*/ '';
+        console.log(codeValue)
+        new QRCode(document.getElementById("qrcode"), codeValue);
+    </script>
+</div>
+

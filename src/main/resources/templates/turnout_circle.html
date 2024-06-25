@@ -1,0 +1,205 @@
+<style>
+    .flex-wrapper {
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    .single-chart {
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    .circular-chart {
+        display: block;
+        margin: 10px auto;
+        max-width: 50%;
+        /*max-height: 250px;*/
+    }
+
+    .circle-bg {
+        fill: none;
+        stroke: #eee;
+        stroke-width: 3.8;
+    }
+
+    .circle {
+        fill: none;
+        stroke-width: 2.8;
+        stroke-linecap: round;
+        animation: progress 1s ease-out forwards;
+    }
+
+    @keyframes progress {
+        0% {
+            stroke-dasharray: 0 100;
+        }
+    }
+
+    .circular-chart.blue .circle {
+        stroke: #1982d5;
+    }
+
+    .percentage {
+        fill: #666;
+        font-family: sans-serif;
+        font-size: 0.5em;
+        text-anchor: middle;
+    }
+</style>
+
+<nav class="navbar bg-secondary bg-gradient container-fluid px-0">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Податоци за излезноста</span>
+    </div>
+</nav>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <div class="container-fluid" id="navbarSupportedContent">
+            <form class="d-flex row gx-3" method="GET" action="/turnout">
+                <div class="col-xl-2 dropdown">
+                    <label for="realizacija" class="m-0 me-2">Реализација</label>
+                    <select class="form-select" id="realizacija" name="realizationId">
+                        <option th:each="realization : ${realizations}" th:value="${realization.id}" th:text="${realization.name}"></option>
+                    </select>
+                </div>
+                <div class="col-xl-2 dropdown">
+                    <label for="opshtina" class="m-0 me-2">Општина</label>
+                    <select class="form-select" id="opshtina" name="opshtinaId">
+                        <option th:each="municipality : ${municipalities}" th:value="${municipality.mapId}" th:text="${municipality.name}"></option>
+                    </select>
+                </div>
+                <div class="col-xl-2 dropdown">
+                    <label for="izbirachko" class="m-0 me-2">Избирачко место</label>
+                    <select class="form-select" id="izbirachko" name="izbirachkoMestoId">
+                        <option th:each="pollingStation : ${pollingStations}" th:value="${pollingStation.id}" th:text="${pollingStation.name}"></option>
+                    </select>
+                </div>
+                <div class="col-xl-2 dropdown">
+                    <label for="chas" class="m-0 me-2">Час</label>
+                    <select class="form-select" id="chas" name="time">
+                    </select>
+                </div>
+                <div class="col-xl-2 d-flex flex-col align-items-center justify-content-center">
+<!--                    <label></label>-->
+                    <button class="btn h-100 w-75 p-auto btn-outline-success" type="submit">Пребарај</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+<nav class="navbar bg-secondary-subtle container-fluid px-0 my-5">
+    <div class="container-fluid">
+        <span class="navbar-brand m-auto mb-0 h1"  th:text="|Податоци за излезноста на: ${realization.name}|"></span>
+    </div>
+</nav>
+
+ <div class="container mt-5">
+    <div  class="row mt-5">
+        <div class="col col-xl-6 col-md-12 d-flex flex-col justify-content-center align-items-center">
+            <div class="single-chart">
+                <svg viewBox="0 0 36 36" class="circular-chart blue">
+                    <path class="circle-bg"
+                          d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+          a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <path class="circle"
+                          th:stroke-dasharray="|${turnoutPercentage}, 100|"
+                          d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+
+          a 15.9155 15.9155 0 0 1 0 -31.831"></path><text x="18" y="20.35" class="percentage" th:text="|${#numbers.formatDecimal(turnoutPercentage, 1, 2, 'COMMA')}%|">30%</text>
+
+                </svg>
+            </div>
+        </div>
+        <div class="col col-xl-6 col-md-12 d-flex flex-col justify-content-center align-items-center">
+            <div id="map"></div>
+        </div>
+    </div>
+</div>
+<div class="flex-wrapper">
+
+</div>
+
+
+
+<script>
+    // Function to generate a random color
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    function getRandomRedColor() {
+        function getRandomLowValue() {
+            return Math.floor(Math.random() * 56); // Random value between 0 and 55
+        }
+
+        function componentToHex(c) {
+            const hex = c.toString(16);
+            return hex.length == 1 ? "0" + hex : hex;
+        }
+
+        const red = 200 + Math.floor(Math.random() * 56); // Random value between 200 and 255
+        const green = getRandomLowValue();
+        const blue = getRandomLowValue();
+        return `#${componentToHex(red)}${componentToHex(green)}${componentToHex(blue)}`;
+    }
+    var selectedId = 2;
+    // Set random color for elements with class .circular-chart.blue .circle
+    document.addEventListener('DOMContentLoaded', function() {
+        var elements = document.querySelectorAll('.circular-chart.blue .circle');
+        elements.forEach(function(element) {
+            element.style.stroke = getRandomColor();
+        });
+
+
+        selectElement = document.getElementById("realizacija")
+
+        selectElement.addEventListener('change', function() {
+            console.log(
+                'dsdsd'
+            )
+            selectedOption = selectElement.options[selectElement.selectedIndex];
+            selectedId = selectedOption.value;
+            console.log('Realizacija ID:', selectedId);
+            updateMunicipalitiesUrls();
+        });
+
+        simplemaps_countrymap.hooks.click_state = (id) => {
+            window.location.href = 'http://localhost:8080/turnout?opshtinaId=' + id + '&realizationId=' + selectedId;
+            console.log(id)
+        }
+
+        const updateMunicipalitiesUrls = () => {
+            console.log("VO UPDATE")
+            Object.keys(simplemaps_countrymap_mapdata.state_specific).forEach(x => {
+                // selectElement = document.getElementById("realizacija") ?? 2
+                // selectedOption = selectElement.options[selectElement.selectedIndex];
+                // selectedId = selectedOption.value ?? 2;
+                console.log(selectedId)
+
+                simplemaps_countrymap_mapdata.state_specific[x].url = 'http://localhost:8080/turnout?opshtinaId=' + x + '&realizationId=' + selectedId;
+                // simplemaps_countrymap_mapdata.state_specific[x].color = getRandomRedColor();
+                console.log(simplemaps_countrymap_mapdata.state_specific[x])
+            })
+        }
+
+        updateMunicipalitiesUrls();
+
+    });
+
+</script>
+
+<script src="mapdata.js"></script>
+<script src="countrymap.js"></script>

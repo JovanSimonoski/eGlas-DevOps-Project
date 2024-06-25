@@ -1,0 +1,21 @@
+<div class="container mt-5">
+    <form action="/vote" method="post">
+        <div class="mb-3">
+            <label for="licence" class="form-label">Број на лична карта</label>
+            <input type="text" class="form-control" id="licence" aria-describedby="emailHelp" name="numberLicence">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+        <div class="mb-3">
+            <label for="embg" class="form-label">ЕМБГ</label>
+            <input type="text" maxlength="13" class="form-control" id="embg" name="embg">
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        </div>
+        <div class="mb-3 form-check" th:if="${error != null && error == true}">
+            <label class="form-check-label text-danger" for="exampleCheck1">Внесените податоци се погрешни</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Продолжи</button>
+    </form>
+</div>

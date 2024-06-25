@@ -1,0 +1,12 @@
+<div class="container mt-5">
+    <form action="/vote/submit" method="post">
+        <div class="mb-3">
+            <label for="elections" class="form-label">Изберете избори на кои сакате да гласате: </label>
+            <select class="form-select" id="elections" name="realizationId">
+                <option th:each="realization : ${realizations}" th:value="${realization.id}" th:text="${realization.name}"></option>
+            </select>
+            <div id="emailHelp" class="form-text">Со клик на копчето продолжи се бележи Вашата излезност и немате можност одново да ја селектирате</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Продолжи</button>
+    </form>
+</div>

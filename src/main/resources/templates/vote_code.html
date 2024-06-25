@@ -1,0 +1,12 @@
+<div class="container mt-5">
+    <form action="/codeVote" method="post">
+        <div class="mb-3">
+            <label for="licence" class="form-label">Внесете го кодот доделен од избирачката комисија за да продолжите со гласањето</label>
+            <input type="text" class="form-control" id="licence" aria-describedby="emailHelp" name="code">
+        </div>
+        <div class="mb-3 form-check" th:if="${error != null && error == true}">
+            <label class="form-check-label text-danger">Внесените податоци се погрешни</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Продолжи</button>
+    </form>
+</div>

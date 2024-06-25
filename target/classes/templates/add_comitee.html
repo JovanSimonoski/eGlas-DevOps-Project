@@ -1,0 +1,100 @@
+<nav class="navbar bg-secondary bg-gradient container-fluid px-0">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Податоци за комисии</span>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h2>Додади комисија</h2>
+    <form th:action="@{/admin/committee}" th:object="${committeeForm}" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input type="hidden" th:field="*{id}">
+                    <label for="realization">Реализација:</label>
+                    <select class="form-control" id="realization" th:field="*{electionRealization}">
+                        <option th:each="realization : ${realizations}" th:value="${realization?.id}" th:text="${realization.name}">Реализација</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="municipality">Избирачко Место:</label>
+                    <select class="form-control" id="municipality" th:field="*{pollingStation}">
+                        <option th:each="station : ${pollingStations}" th:value="${station?.id}" th:text="${station.name}">Ибзирачко место</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-5">
+                    <label for="leftSelect">Сите членови</label>
+                    <select id="leftSelect" class="form-control" size="10" multiple>
+                        <option th:each="member : ${committeeMembers}" th:value="${member?.id}" th:text="${member?.name + ' ' + member?.surname}">Избери членови</option>
+                    </select>
+                </div>
+                <div class="col-md-2 text-center">
+                    <button id="moveRight" class="btn btn-primary mb-2">&gt;&gt;</button>
+                    <button id="moveLeft" class="btn btn-primary mb-2">&lt;&lt;</button>
+                </div>
+                <div class="col-md-5">
+                    <label for="rightSelect">Избрани членови</label>
+                    <select id="rightSelect" class="form-control" size="10" name="membersId"  multiple>
+                        <!-- Options moved from left select will appear here -->
+                    </select>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success mt-3">Поднеси</button>
+    </form>
+</div>
+
+<div class="container-fluid">
+    <table class="table table-striped table-hover">
+        <thead class="table-header">
+        <tr>
+            <th>#</th>
+            <th>Избирачко место</th>
+            <th>Реализација</th>
+            <th>Членови на комисија</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:onclick="|window.location.href='/edit/${committee.id}/committee';|" th:each="committee, iter : ${committees}">
+            <td th:text="${iter.count}"></td>
+            <td th:text="${committee?.pollingStation?.name}"></td>
+            <td th:text="${committee?.electionRealization?.name}"></td>
+            <td th:text="${committee?.getCommitteeMembers()}"></td>
+<!--            <td th:text="${#strings.arrayJoin(committee.members.stream().map(member -> member.name).toArray(), ', ')}"></td>-->
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    document.getElementById('moveRight').addEventListener('click', function(e) {
+        e.preventDefault();
+        moveSelectedOptions('leftSelect', 'rightSelect');
+    });
+
+    document.getElementById('moveLeft').addEventListener('click', function(e) {
+        e.preventDefault();
+        moveSelectedOptions('rightSelect', 'leftSelect');
+    });
+
+    function moveSelectedOptions(sourceId, destinationId) {
+        let sourceSelect = document.getElementById(sourceId);
+        let destinationSelect = document.getElementById(destinationId);
+
+        let selectedOptions = Array.from(sourceSelect.selectedOptions);
+        selectedOptions.forEach(option => {
+            destinationSelect.appendChild(option);
+        });
+    }
+</script>
